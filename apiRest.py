@@ -131,21 +131,37 @@ def addOneElementPlaylist():
     global IdForPlaylist
     newId = IdForPlaylist
     IdForPlaylist = IdForPlaylist + 1
-    newElePlay = {
-        'id': newId,
-        'idSong':int(req['idSong']),
-        'user' : req['user'],
-        'name' : req['name'],
-        'artist': req['artist'],
-        'album':req['album'],
-        'year':req['year'],
-        'spotify':req['spotify'],
-        'youtube':req['youtube']
-    }
-    jsonify(newElePlay)
-    Playlist.append(newElePlay)
-    ans = 'todo bien'
-    return jsonify({'answer':ans})
+    IdS = req['id']
+    userPlay = req['user']
+    songToWork = [i for i in Song if str(i['id']) == IdS]
+    if (len(songToWork) > 0):
+        for j in Playlist:
+            if j['idSong'] == int(IdS) and j['user'] == userPlay:
+                ans = 'null'
+                desc = 'La canción ya está en Playlist'
+                print('pasa por el if')
+                break
+        else:
+            newElePlay = {
+                'id': newId,
+                'idSong':int(songToWork[0]['id']),
+                'user' : userPlay,
+                'name' : songToWork[0]['name'],
+                'artist': songToWork[0]['artist'],
+                'album':songToWork[0]['album'],
+                'year':songToWork[0]['year'],
+                'spotify':songToWork[0]['spotify'],
+                'youtube':songToWork[0]['youtube']
+            }
+            jsonify(newElePlay)
+            Playlist.append(newElePlay)
+            ans = 'ok'
+            desc = 'Canción agregarda a tu lista'
+    else: 
+        ans = 'null'
+        desc = 'Song not found'
+
+    return jsonify({'answer':ans,'desc':desc})
 
 #---------------------------------------------------- COMENTS ---------------------------------------------------
 

@@ -235,6 +235,10 @@ def deleteSong():
     idSong = req['id']
     stock = [i for i in Song if str(i['id']) == idSong]
     if (len(stock) > 0):
+        for j in Playlist:
+            if j['idSong'] == int(idSong):
+                Playlist.remove(j)
+
         Song.remove(stock[0])
         ans = 'ok'
         desk = 'Song deleted'
